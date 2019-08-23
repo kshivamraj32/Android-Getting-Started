@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private static final String TAG = "MainActivity";
@@ -15,10 +16,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor mLight;
     private Sensor accel;
 
+    private TextView light, x, y, z;
+
+
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        light = (TextView) findViewById(R.id.textView);
+        x = (TextView) findViewById(R.id.textView2);
+        y = (TextView) findViewById(R.id.textView3);
+        z = (TextView) findViewById(R.id.textView4);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -35,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public final void onSensorChanged(SensorEvent event) {
+    public final void onSensorChanged(final SensorEvent event) {
         // The light sensor returns a single value.
         // Many sensors return 3 values, one for each axis.
         float lux = event.values[0];
@@ -50,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Log.d(TAG, "onSensorChanged: Y: " + event.values[1]);
             Log.d(TAG, "onSensorChanged: Z: " + event.values[2]);
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+                    light.setText(Float.toString(event.values[0]));
+                }
+                if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+                    x.setText(Float.toString(event.values[0]));
+                    y.setText(Float.toString(event.values[1]));
+                    z.setText(Float.toString(event.values[2]));
+                }
+            }
+        });
     }
 
     @Override
