@@ -23,9 +23,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (mLight == null){
-            while (true){
                 Log.d(TAG, "Light Sensor is not present");
-            }
         }
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
